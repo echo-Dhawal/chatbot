@@ -1,0 +1,21 @@
+import openai
+import gradio
+
+openai.api_key = "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"
+
+messages = [{"role": "system", "content": "Your Solutions"}]
+
+def yourbot(user_input):
+    messages.append({"role": "user", "content": user_input})
+    response = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo",
+        messages = messages
+    )
+    yourbot_reply = response["choices"][0]["message"]["content"]
+    messages.append({"role": "assistant", "content": yourbot_reply})
+
+    return yourbot_reply
+
+demo = gradio.Interface(fn=yourbot, inputs = "text", outputs = "text", title = "ASK ME ANYTHING")
+
+demo.launch(share=True)
