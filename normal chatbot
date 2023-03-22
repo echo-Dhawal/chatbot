@@ -1,0 +1,23 @@
+import random
+responses = {
+    "hi": ["Hello!", "Hi there!", "Hey!"],
+    "how are you?": ["I'm good, thanks for asking.", "I'm doing well, how about you?"],
+    "what's your name?": ["My name is Chatbot.", "I'm Chatbot, nice to meet you!"],
+    "default": ["I'm sorry, I didn't understand what you said.", "Can you please rephrase that?", "I'm not sure what you mean."]
+}
+def respond(message):
+    if message in responses:
+        return random.choice(responses[message])
+    else:
+        return random.choice(responses["default"])
+def chat():
+    print("Hi, I'm a chatbot. How can I help you?")
+    while True:
+        message = input("You: ")
+        if message.lower() == "bye":
+            print("Chatbot: Goodbye!")
+            break
+        else:
+            print("Chatbot:", respond(message))
+
+chat()
