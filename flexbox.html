@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRICING TABLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Sono:wght@400;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body{
+            font-family: 'sono',sans-serif;
+        }
+        .pricing-container{
+            display: flex;
+            justify-content: center;
+            align-items: center ;
+            background-color: lightskyblue;
+            height: 100vh;
+            gap: 5rem;
+        }
+        .pricing-plan {
+            flex: 1;
+            max-width: 400px;
+            padding: 20px;
+            background-color: whitesmoke ;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .plan-title{
+            font-size: 24px;
+            font-weight: bold;
+            margin bottom: 10px;
+        }
+        .plan-price{
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .plan-feature{
+            list-style:none;            
+            padding: 0;
+            margin: 0;
+
+        }
+        .plan-feature li{
+            margin-bottom: 20px;
+
+        }
+        .plan-button {
+            padding: 10px;
+            background-color: orangered;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+        }
+        @media (max-width 1250px){
+            .pricing-container{
+                flex-direction:column;
+                height: 100%;
+            }
+        }
+
+
+        
+
+    </style>
+</head>
+<body>
+    <div class=" pricing-container">
+        <div class="pricing-plan">
+            <div class="plan-title">BASIC</div>
+            <div class="plan-price">$59/month</div>
+            <ul class="plan-feature">
+                <li> free download</li>
+                <li> one device</li>
+                <li> mobile </li>
+            </ul>
+            <button class="plan-button">sign Up</button>
+        </div>
+        <div class="pricing-plan">
+            <div class="plan-title">ADAVANCED</div>
+            <div class="plan-price">$129/month</div>
+            <ul class="plan-feature">
+                <li> free download</li>
+                <li> two device</li>
+                <li> mobile and tab  </li>
+            </ul>
+            <button class="plan-button">sign Up</button>
+        </div>
+        <div class="pricing-plan">
+            <div class="plan-title">PREMIUM</div>
+            <div class="plan-price">$199/month</div>
+            <ul class="plan-feature">
+                <li> free download</li>
+                <li>four device</li>
+                <li> mobile , tab , laptop and tv   </li>
+            </ul>
+            <button class="plan-button">sign Up</button>
+        </div>
+
+
+    </div>
+    
+</body>
+</html>
