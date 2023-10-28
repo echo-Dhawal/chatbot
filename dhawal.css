@@ -1,0 +1,178 @@
+body{
+   background-color:  rgb(0,0,33);
+}
+nav{ 
+    display: flex;
+    justify-content: space-around;
+   align-items: center;
+   background-color: rgb(18,18,62);
+   height: 60px;
+   color: white;
+   width: 100%;
+
+
+}
+nav ul{
+    display: flex;
+    justify-content: space-between ;
+}
+nav ul li {
+    list-style: none;
+    margin: 0 23px;
+    
+}
+nav ul li a{
+    text-decoration: none;
+    color: white;
+}
+nav ul li a:hover {
+    color: rgb(0, 119, 255);
+    font-size: 1.04rem;
+}
+.left{
+    font-size: 1.5rem;
+    margin-right: 150px;
+}
+.firstsection{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+}
+.leftsection{
+    color: white;
+    font-size: xx-large;
+    font-family: 'Poppins', sans-serif;
+    
+}
+.rightsection{
+    color: white;
+}
+
+.rightsection img{
+    width: 80%;
+    margin: 50px 0;
+    border-radius: 50%;
+}
+#element{
+    color: rgb(0, 119, 255);
+}
+
+
+
+.secondsection h1{
+    color: lavender;
+    margin-top: -3px;
+    font-size: 1.5rem;
+}
+hr{
+    
+    color: white;
+    margin: 40px 84px;
+
+}
+.text-grey{
+    color: gray;
+}
+.box {
+    background-color: white;
+    width: 85vw;
+    height: 2px;
+    margin: 80px 83px;
+    display: flex ;
+}
+.vertical{
+    height: 80px;
+    width: 1px;
+    background-color: white;
+    
+    margin: 0 120px;
+}
+.vertical-title{
+   color: white;
+   color: white;
+   margin: 4px -97px;
+
+
+}
+.vertical-desc{color: grey;
+    font-size: 18px;
+    width: 160px;
+    position: relative;
+    top: 58px;
+    left: -55px;
+}
+
+.footer{
+    margin: 350px 2px;
+    display:flex;
+    justify-content: space-evenly;
+    background-color:rgb(18 0 36);
+    height: 342px;
+    width: 100%;
+    
+}
+
+
+.footer-first{
+    
+    color: white;
+    
+    
+}
+.footer-second{
+    display: flex;
+    justify-content: center;
+}
+.footer-second ul li{
+    color: white;
+    list-style: none;
+    font-size: 19px;
+    display: flex;
+    justify-content: space-evenly;
+    margin: 15px -18px;
+    cursor: pointer;
+}
+.footer-text{
+    display: flex;
+    color: white;
+    margin: 9px -90px;
+
+}
+.footer-first h2 {
+    margin: 10px 46px;
+}
+.btn{
+    padding:12px ;
+    background-color: #1e2167;
+    color: white;
+    border: 2px solid white;
+    border-radius: 6px;
+    font-size: 20px;
+    cursor: pointer;
+}
+.buttons{
+    margin: 20px 1px;
+}
+.btn a{
+    color: white;
+    text-decoration: none;
+}
+.instagram svg{
+    width: 40px;
+    margin: -362px -251px;
+
+}
+.twitter svg{
+    width: 40px;
+    margin: -362px -251px;
+
+}
+.socialmedia svg{
+    width: 30px;
+    margin: -360px 0px;
+}
+
+.socialmedia{
+    margin: 10px 110px;
+}
