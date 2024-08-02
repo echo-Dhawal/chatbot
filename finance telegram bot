@@ -1,0 +1,152 @@
+const TelegramBot = require('node-telegram-bot-api');
+const XLSX = require('xlsx');
+const fs = require('fs');
+const path = require('path');
+
+// Replace 'YOUR_TOKEN' with your actual bot token
+const token = '7180235685:AAGktnnSZiQlwqlWzh0qTTyO-e0d2E7IJnU';
+const bot = new TelegramBot(token, { polling: true });
+
+// Path to the JSON file to store user data
+const DATA_FILE = path.join(__dirname, 'user_data.json');
+
+
+let userData = {};
+if (fs.existsSync(DATA_FILE)) {
+    userData = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+}
+
+// Save data to the JSON file
+function saveData() {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(userData, null, 2), 'utf-8');
+}
+
+// Bot command handler for /start
+bot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    const userId = msg.from.id;
+    const username = msg.from.username || 'Anonymous';
+
+    if (!userData[userId]) {
+        userData[userId] = {
+            userId,
+            username,
+            entries: [],
+            step: 'name'
+        };
+    } else {
+        userData[userId].step = 'name'; // Reset step to 'name' for new entries
+    }
+
+    bot.sendMessage(chatId, `Hi ${username}! Let's start. Please enter your name:`);
+});
+
+// Bot command handler for /done
+bot.onText(/\/done/, (msg) => {
+    const chatId = msg.chat.id;
+    const userId = msg.from.id;
+
+    if (!userData[userId]) {
+        bot.sendMessage(chatId, 'You do not have an active session. Start with /start.');
+        return;
+    }
+
+    bot.sendMessage(chatId, 'Session saved! You can continue adding entries or type /get_excel to get the current Excel file.');
+});
+
+// Bot command handler for /get_excel
+bot.onText(/\/get_excel/, (msg) => {
+    const chatId = msg.chat.id;
+    const userId = msg.from.id;
+
+    if (!userData[userId] || userData[userId].entries.length === 0) {
+        bot.sendMessage(chatId, 'No data available. Start with /start to add entries.');
+        return;
+    }
+
+    sendExcelFile(chatId, userData[userId]);
+});
+
+// Bot message handler for text input
+bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    const userId = msg.from.id;
+    const text = msg.text;
+
+    // Ignore messages if not in a session or if it's a command
+    if (!userData[userId] || text.startsWith('/start') || text.startsWith('/done') || text.startsWith('/get_excel')) {
+        return;
+    }
+
+    const session = userData[userId];
+
+    switch (session.step) {
+        case 'name':
+            session.entries.push({ name: text });
+            session.step = 'amount';
+            bot.sendMessage(chatId, 'Please enter the amount:');
+            break;
+        case 'amount':
+            if (isNaN(parseFloat(text))) {
+                bot.sendMessage(chatId, 'Invalid amount. Please enter a valid number for amount:');
+            } else {
+                session.entries[session.entries.length - 1].amount = parseFloat(text);
+                session.step = 'credit';
+                bot.sendMessage(chatId, 'Please enter credit or debit (credit/debit):');
+            }
+            break;
+        case 'credit':
+            if (!['credit', 'debit'].includes(text.toLowerCase())) {
+                bot.sendMessage(chatId, 'Invalid input. Please enter credit or debit:');
+            } else {
+                session.entries[session.entries.length - 1].credit = text.toLowerCase();
+                session.step = 'description';
+                bot.sendMessage(chatId, 'Please enter the description:');
+            }
+            break;
+        case 'description':
+            session.entries[session.entries.length - 1].description = text;
+            session.step = 'name';  // Loop back to ask for the next entry
+            bot.sendMessage(chatId, 'Details saved! Please enter the next name, type /done to finish this session, or /get_excel to get the current Excel file.');
+            break;
+        default:
+            bot.sendMessage(chatId, 'Something went wrong. Please start the process by typing /start');
+            break;
+    }
+
+    saveData(); // Save data after each step
+});
+
+// Function to generate and send Excel file to the user
+function sendExcelFile(chatId, session) {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet([
+        ['User ID', 'Username', 'Name', 'Amount', 'Credit/Debit', 'Description'],
+        ...session.entries.map(entry => [
+            session.userId,
+            session.username,
+            entry.name,
+            entry.amount || '',
+            entry.credit || '',
+            entry.description || ''
+        ])
+    ]);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+
+    bot.sendDocument(chatId, excelBuffer, {}, {
+        filename: 'user_data.xlsx',
+        contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }).then(() => {
+        console.log('Excel file sent successfully.');
+    }).catch((error) => {
+        console.error('Error sending Excel file:', error);
+        bot.sendMessage(chatId, 'Failed to send Excel file. Please try again later.');
+    });
+}
+
+// Log any errors
+bot.on('polling_error', (error) => {
+    console.error('Polling error:', error);
+});
